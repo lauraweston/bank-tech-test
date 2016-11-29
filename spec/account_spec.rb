@@ -7,6 +7,12 @@ describe Account do
     expect(account.balance).to eq "0.00"
   end
 
+  describe "statement" do
+    it "stores the transaction history" do
+      expect(account.transactions).to eq []
+    end
+  end
+
   describe "depositing" do
     context "initial balance is zero" do
       it "changes the balance by the deposited amount" do
