@@ -1,8 +1,8 @@
 class Credit
   attr_reader :amount, :time
-  
-  def initialize(amount, time)
+
+  def initialize(amount)
     @amount = amount
-    @time = time
+    @time = Time.now
   end
 end
