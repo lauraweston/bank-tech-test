@@ -5,7 +5,10 @@ class Account
   end
 
   def balance
-    pence = @pence.to_s.rjust(2, "0")
-    "#{@pounds}.#{pence}"
+    pennies = pence.to_s.rjust(2, "0")
+    "#{pounds}.#{pennies}"
   end
+
+  private
+  attr_reader :pounds, :pence
 end
