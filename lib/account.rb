@@ -20,6 +20,7 @@ class Account
     withdrawn_pence = convert_to_pence(amount)
     if pence >= withdrawn_pence
       @pence -= withdrawn_pence
+      @transactions << Debit.new(withdrawn_pence)
     else
       raise "Insufficient funds: available balance £#{balance}"
     end
