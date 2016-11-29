@@ -9,10 +9,19 @@ class Account
   end
 
   def deposit(amount)
-    deposited_pence = amount.delete(".").to_i
+    deposited_pence = convert_to_pence(amount)
     @pence += deposited_pence
+  end
+
+  def withdraw(amount)
+    withdrawn_pence = convert_to_pence(amount)
+    @pence -= withdrawn_pence
   end
 
   private
   attr_reader :pence
+
+  def convert_to_pence(amount)
+    amount.delete(".").to_i
+  end
 end
