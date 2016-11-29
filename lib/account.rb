@@ -1,6 +1,6 @@
 class Account
   attr_reader :transactions
-  
+
   def initialize
     @pence = 0
     @transactions = []
@@ -13,6 +13,7 @@ class Account
   def deposit(amount)
     deposited_pence = convert_to_pence(amount)
     @pence += deposited_pence
+    @transactions << Credit.new(deposited_pence)
   end
 
   def withdraw(amount)

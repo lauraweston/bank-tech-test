@@ -1,4 +1,5 @@
 require_relative "../lib/account"
+require_relative "../lib/credit"
 
 describe Account do
   subject(:account) { described_class.new }
@@ -15,10 +16,25 @@ describe Account do
 
   describe "depositing" do
     context "initial balance is zero" do
+      let(:credit) { double :credit }
+
       it "changes the balance by the deposited amount" do
         account.deposit("10.50")
 
         expect(account.balance).to eq "10.50"
+      end
+
+      it "creates a new instance of Credit" do
+        expect(Credit).to receive(:new)
+        account.deposit("10.50")
+      end
+
+      it "adds the Credit instance to the transactions list" do
+        allow(Credit).to receive(:new).and_return(credit)
+        account.deposit("10.50")
+        
+        expect(account.transactions.length).to eq 1
+        expect(account.transactions.last).to eq credit
       end
     end
 
