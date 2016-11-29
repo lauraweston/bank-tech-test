@@ -33,12 +33,18 @@ describe Account do
 
           expect(account.balance).to eq "5.75"
         end
+        it "allows withdrawals of full remaining balance" do
+          account.deposit("10.34")
+          account.withdraw("10.34")
+
+          expect(account.balance).to eq "0.00"
+        end
       end
 
       context "withdrawal amount is greater than account balance" do
         it "does not allow the amount to be withdrawn" do
           account.deposit("5.00")
-          
+
           expect { account.withdraw("10.00") }.to raise_error "Insufficient funds: available balance £5.00"
           expect(account.balance).to eq "5.00"
         end
