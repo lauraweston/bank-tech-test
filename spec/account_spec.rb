@@ -15,6 +15,7 @@ describe Account do
         expect(account.balance).to eq "10.50"
       end
     end
+
     context "initial balance is greater than zero" do
       it "changes the balance by the deposited amount" do
         account.deposit("10.50")
@@ -31,6 +32,15 @@ describe Account do
           account.withdraw("4.25")
 
           expect(account.balance).to eq "5.75"
+        end
+      end
+
+      context "withdrawal amount is greater than account balance" do
+        it "does not allow the amount to be withdrawn" do
+          account.deposit("5.00")
+          
+          expect { account.withdraw("10.00") }.to raise_error "Insufficient funds: available balance £5.00"
+          expect(account.balance).to eq "5.00"
         end
       end
     end
