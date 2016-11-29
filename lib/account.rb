@@ -15,17 +15,17 @@ class Account
 
   def deposit(amount)
     deposited_pence = convert_to_pence(amount)
-    @pence += deposited_pence
-    @transactions << credit.new(deposited_pence)
+    transaction = credit.new(deposited_pence)
+    update_account(transaction)
   end
 
   def withdraw(amount)
     withdrawn_pence = convert_to_pence(amount)
-    if pence >= withdrawn_pence
-      @pence -= withdrawn_pence
-      @transactions << debit.new(withdrawn_pence)
-    else
+    if withdrawn_pence > pence
       raise "Insufficient funds: available balance #{balance}"
+    else
+      transaction = debit.new(withdrawn_pence)
+      update_account(transaction)
     end
   end
 
@@ -38,5 +38,18 @@ class Account
 
   def convert_pence_to_balance
     pence.to_s.rjust(3, "0").insert(-3, ".")
+  end
+
+  def update_balance(amount)
+    @pence += amount
+  end
+
+  def update_transactions(transaction)
+    @transactions << transaction
+  end
+
+  def update_account(transaction)
+    update_balance(transaction.amount)
+    update_transactions(transaction)
   end
 end

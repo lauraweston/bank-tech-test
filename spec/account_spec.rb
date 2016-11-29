@@ -1,15 +1,9 @@
 require_relative "../lib/account"
-# require_relative "../lib/credit"
-# require_relative "../lib/debit"
+require_relative "../lib/credit"
+require_relative "../lib/debit"
 
 describe Account do
-  let(:credit_class) { double :credit_class }
-  let(:debit_class) { double :debit_class }
-  subject(:account) { described_class.new(credit_class, debit_class) }
-
-  before :each do
-    allow(credit_class).to receive(:new)
-  end
+  subject(:account) { described_class.new(Credit, Debit) }
 
   it "initializes with a balance of zero" do
     expect(account.balance).to eq "£0.00"
@@ -23,7 +17,7 @@ describe Account do
 
   describe "depositing" do
     context "initial balance is zero" do
-      let(:credit_instance) { double :credit_instance }
+      let(:credit_instance) { double :credit_instance, amount: 1050 }
 
       it "changes the balance by the deposited amount" do
         account.deposit("10.50")
@@ -32,12 +26,12 @@ describe Account do
       end
 
       it "creates a new instance of Credit" do
-        expect(credit_class).to receive(:new).with(1050)
+        expect(Credit).to receive(:new).with(1050).and_return(credit_instance)
         account.deposit("10.50")
       end
 
       it "adds the Credit instance to the transactions list" do
-        allow(credit_class).to receive(:new).with(1050).and_return(credit_instance)
+        allow(Credit).to receive(:new).with(1050).and_return(credit_instance)
         account.deposit("10.50")
 
         expect(account.transactions.length).to eq 1
@@ -56,10 +50,9 @@ describe Account do
   end
 
   describe "withdrawing" do
-    let(:debit_instance) { double :debit_instance }
+    let(:debit_instance) { double :debit_instance, amount: -550 }
 
     before :each do
-      allow(debit_class).to receive(:new)
       account.deposit("10.00")
     end
 
@@ -77,12 +70,13 @@ describe Account do
       end
 
       it "creates a new instance of Debit" do
-        expect(debit_class).to receive(:new).with(550)
+        expect(Debit).to receive(:new).with(550).and_return(debit_instance)
         account.withdraw("5.50")
+        p
       end
 
       it "adds the Debit instance to the transactions list" do
-        allow(debit_class).to receive(:new).with(550).and_return(debit_instance)
+        allow(Debit).to receive(:new).with(550).and_return(debit_instance)
         account.withdraw("5.50")
 
         expect(account.transactions.length).to eq 2
