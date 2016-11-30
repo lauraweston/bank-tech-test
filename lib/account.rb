@@ -23,10 +23,9 @@ class Account
     withdrawn_pence = convert_to_pence(amount)
     if withdrawn_pence > pence
       raise "Insufficient funds: available balance #{balance}"
-    else
-      transaction = debit.new(withdrawn_pence)
-      update_account(transaction)
     end
+    transaction = debit.new(withdrawn_pence)
+    update_account(transaction)
   end
 
   private
