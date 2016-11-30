@@ -1,9 +1,10 @@
 require_relative "../lib/account"
 require_relative "../lib/credit"
 require_relative "../lib/debit"
+require_relative "../lib/print_statement"
 
 describe Account do
-  subject(:account) { described_class.new(Credit, Debit) }
+  subject(:account) { described_class.new(Credit, Debit, PrintStatement) }
 
   it "initializes with a balance of zero" do
     expect(account.balance).to eq "£0.00"
@@ -12,6 +13,19 @@ describe Account do
   describe "statement" do
     it "stores the transaction history" do
       expect(account.transactions).to eq []
+    end
+    it "returns the statement of transactions" do
+      credit = Credit.new(1050)
+      debit = Debit.new(550)
+      statement = PrintStatement.new([credit, debit])
+      allow(Credit).to receive(:new).with(1050).and_return(credit)
+      allow(Debit).to receive(:new).with(550).and_return(debit)
+      account.deposit("10.50")
+      account.withdraw("5.50")
+
+      expect(PrintStatement).to receive(:new).with([credit, debit]).and_return(statement)
+      expect(statement).to receive(:execute)
+      account.statement
     end
   end
 

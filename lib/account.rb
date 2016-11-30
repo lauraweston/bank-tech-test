@@ -2,11 +2,12 @@
 class Account
   attr_reader :transactions
 
-  def initialize(credit, debit)
+  def initialize(credit, debit, print_statement)
     @pence = 0
     @transactions = []
     @credit = credit
     @debit = debit
+    @print_statement = print_statement
   end
 
   def balance
@@ -28,8 +29,12 @@ class Account
     update_account(transaction)
   end
 
+  def statement
+    print_statement.new(transactions).execute
+  end
+
   private
-  attr_reader :pence, :credit, :debit
+  attr_reader :pence, :credit, :debit, :print_statement
 
   def convert_to_pence(amount)
     amount.delete(".").to_i
