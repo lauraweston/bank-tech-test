@@ -8,7 +8,7 @@ class PrintStatement
     format_transactions.reverse.each do |summary|
       puts summary
     end
-    puts ""
+    return nil
   end
 
   private
